@@ -1,1 +1,8 @@
 .env
+todo.todo
+data
+MLTest.py
+__pycache__
+models
+
+chart.*

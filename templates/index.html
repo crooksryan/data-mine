@@ -1,9 +1,57 @@
 {% extends "layout.html" %}
 
 {% block heading %}
-    Title Page
+    Dashboard
 {% endblock %}
 
 {% block body %}
-    Hello
+    <h1>Dashboard</h1>
+    <h2 class="title">Stock</h2>
+
+    <div class="box">
+        <div class="container">
+            <div class="wide item">
+                <canvas id="myChart1"></canvas>
+            </div>
+
+            <div class="small item right">
+                <h3>Shares: 10.0</h3>
+                <h3>Value: $454.22</h3>
+                <h3>Cash: $85.34</h3>
+            </div>
+        </div>
+    </div>
+
+    <h2 class="title">Stock</h2>
+    <div class="box">
+        <div class="container">
+            <div class="small item">
+                <h3>Shares: 10.0</h3>
+                <h3>Value: $454.22</h3>
+                <h3>Cash: $85.34</h3>
+            </div>
+
+            <div class="wide item right">
+                <canvas id="myChart2"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <h2 class="title">Stock</h2>
+    <div class="box">
+        <div class="container">
+            <div class="wide item">
+                <canvas id="myChart3"></canvas>
+            </div>
+
+            <div class="small item right">
+                <h3>Shares: 10.0</h3>
+                <h3>Value: $454.22</h3>
+                <h3>Cash: $85.34</h3>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
 {% endblock %}
