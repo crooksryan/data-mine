@@ -1,62 +1,94 @@
-const ctx = document.getElementById('myChart1');
+const aapl = document.getElementById('aapl');
 
-new Chart(ctx, {
-  type: 'bar',
+let xVals = [1,2,3,4,5,6,7,8,9,10]
+let yVals = [10,18,13,16,12,13,22,15,16,18]
+
+new Chart(aapl, {
+  type: 'line',
   data: {
-    labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+    labels: xVals,
     datasets: [{
-      label: '# of Votes',
-      data: [12, 19, 3, 5, 2, 3],
-      borderWidth: 1
+      label: 'Price',
+      data: yVals,
+      backgroundColor: 'rgba(115, 0, 115, 1.0)',
+      borderColor: "rgba(95, 0, 95, 1.0)",
+      tension: 0.15
     }]
   },
   options: {
-    scales: {
-      y: {
-        beginAtZero: true
+    plugins:{
+      legend:{
+        display: false
       }
     }
   }
 });
 
-const bal = document.getElementById('myChart2');
+const amzn = document.getElementById('amzn');
 
-new Chart(bal, {
-  type: 'bar',
+new Chart(amzn, {
+  type: 'line',
   data: {
-    labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+    labels: xVals,
     datasets: [{
-      label: '# of Votes',
-      data: [12, 19, 3, 5, 2, 3],
-      borderWidth: 1
+      label: 'Price',
+      data: yVals,
+      backgroundColor: 'rgba(115, 0, 115, 1.0)',
+      borderColor: "rgba(95, 0, 95, 1.0)",
+      tension: 0.15
     }]
   },
   options: {
-    scales: {
-      y: {
-        beginAtZero: true
+    plugins:{
+      legend:{
+        display: false
       }
     }
   }
 });
 
 
-const cal = document.getElementById('myChart3');
+const goog = document.getElementById('goog');
 
-new Chart(cal, {
-  type: 'bar',
+new Chart(goog, {
+  type: 'line',
   data: {
-    labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+    labels: xVals,
     datasets: [{
-      label: '# of Votes',
-      data: [12, 19, 3, 5, 2, 3],
-      borderWidth: 1
+      label: 'Price',
+      data: yVals,
+      backgroundColor: 'rgba(115, 0, 115, 1.0)',
+      borderColor: "rgba(95, 0, 95, 1.0)",
+      tension: 0.15
     }]
   },
   options: {
-    scales: {
-      y: {
-        beginAtZero: true
+    plugins:{
+      legend:{
+        display: false
+      }
+    }
+  }
+});
+
+const voo = document.getElementById('voo');
+
+new Chart(voo, {
+  type: 'line',
+  data: {
+    labels: xVals,
+    datasets: [{
+      label: 'Price',
+      data: yVals,
+      backgroundColor: 'rgba(115, 0, 115, 1.0)',
+      borderColor: "rgba(95, 0, 95, 1.0)",
+      tension: 0.15
+    }]
+  },
+  options: {
+    plugins:{
+      legend:{
+        display: false
       }
     }
   }

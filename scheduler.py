@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import tensorflow as tf
 from tensorflow import keras
-from datetime import datetime
+from datetime import datetime, timedelta
 from sklearn.preprocessing import MinMaxScaler
 
 import requests
@@ -85,15 +85,45 @@ def machine():
         print(e)
     return
 
+# TODO: make the predictions and model system better
+    # honestly, no idea what this does but it isn't good
 def predictions():
-    # will make predictions when right before market open
-    # this will also handle reporting
-        # might report to the flask server
-        # might also send out email
+    if not api.is_open:
+        return
+    
     try:
+        totalPre = {}
         for stock in api.stocks:
             model = keras.models.load_model(f'./models/{stock}.keras')
+            scaler = MinMaxScaler(feature_range=(0,1))
 
+            data = pd.read_csv(f'./data/{stock}.csv')
+
+            price_data = data.filter(['price'])
+            dataset = price_data.values
+            scaled_data = scaler.fit_transform(dataset)
+
+            future_input_data = []
+
+            start_index = len(scaled_data) - 60
+            end_index = start_index + 60
+                
+            future_input_sequence = scaled_data[start_index:end_index, 0]
+            future_input_data.append(future_input_sequence)
+
+            
+            future_input_data = np.array(future_input_data)
+
+            future_input_data = np.reshape(future_input_data, (future_input_data.shape[0], future_input_data.shape[1], 1))
+
+            future_predictions = model.predict(future_input_data)
+
+            future_predictions = scaler.inverse_transform(future_predictions)
+
+            totalPre[stock] = future_predictions.tolist()[0]
+        print(totalPre)
+        
+        requests.get('http://127.0.0.1:5000/predictions', json=totalPre)
 
     except Exception as e:
         print(e)
@@ -119,3 +149,4 @@ def predictions():
 #     sleep(1)
 
 # machine()
+predictions()
