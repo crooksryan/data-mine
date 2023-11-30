@@ -27,9 +27,11 @@ db = scoped_session(sessionmaker(bind=engine))
 
 api = StockAPI()
 
+
 @app.route('/')
 def index():
     return render_template('index.html')
+
 
 @app.route('/predictions')
 def predictions():
@@ -47,7 +49,7 @@ def predictions():
         except Exception:
             sleep(30)
             price = api.get_bars([stock])[stock.upper()].vw
-        
+
         if price <= pred[0]:
             # buy
             ...
@@ -57,7 +59,8 @@ def predictions():
         else:
             # hold
             ...
-        
+
     return "200"
+
 
 app.run('0.0.0.0', port=5000, debug=True)
