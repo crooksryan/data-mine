@@ -14,24 +14,24 @@ import requests
 
 api = StockAPI()
 
+
 def getData(iterations=0):
     # will get the stock price for every stock if market is open
     try:
         if not api.is_open():
             return
-        
+
         for stock in api.stocks:
             bar = api.get_bars(stock)
             price = bar.vw
             date = str(bar.t).replace('4:00', '')
-            
+
             with open(f'./data/{stock}.cs', 'a') as file:
                 file.write(f'{date},{price}\n')
-    except:
+    except Exception:
         if iterations < 10:
             sleep(60)
             return getData(iterations=iterations+1)
-
 
 
 def machine():
@@ -50,9 +50,8 @@ def machine():
             dataset = price_data.values
             training = int(np.ceil(len(dataset)))
 
-            scaler = MinMaxScaler(feature_range=(0,1))
+            scaler = MinMaxScaler(feature_range=(0, 1))
             scaled_data = scaler.fit_transform(dataset)
-
 
             train_data = scaled_data[0:int(training), :]
 
@@ -64,7 +63,8 @@ def machine():
                 y_train.append(train_data[i, 0])
 
             x_train, y_train = np.array(x_train), np.array(y_train)
-            x_train = np.reshape(x_train, (x_train.shape[0], x_train.shape[1], 1))
+            x_train = np.reshape(x_train,
+                                 (x_train.shape[0], x_train.shape[1], 1))
 
             model = keras.models.Sequential()
             model.add(keras.layers.LSTM(units=64,
@@ -76,7 +76,7 @@ def machine():
             model.add(keras.layers.Dense(1))
 
             model.compile(optimizer=keras.optimizers.Nadam(),
-                        loss='mean_squared_error')
+                          loss='mean_squared_error')
             model.fit(x_train, y_train, epochs=80)
 
             print(f'Saving: {stock} model')
@@ -85,17 +85,18 @@ def machine():
         print(e)
     return
 
+
 # TODO: make the predictions and model system better
     # honestly, no idea what this does but it isn't good
 def predictions():
     if not api.is_open:
         return
-    
+
     try:
         totalPre = {}
         for stock in api.stocks:
             model = keras.models.load_model(f'./models/{stock}.keras')
-            scaler = MinMaxScaler(feature_range=(0,1))
+            scaler = MinMaxScaler(feature_range=(0, 1))
 
             data = pd.read_csv(f'./data/{stock}.csv')
 
@@ -107,14 +108,17 @@ def predictions():
 
             start_index = len(scaled_data) - 60
             end_index = start_index + 60
-                
+
             future_input_sequence = scaled_data[start_index:end_index, 0]
             future_input_data.append(future_input_sequence)
 
-            
             future_input_data = np.array(future_input_data)
 
-            future_input_data = np.reshape(future_input_data, (future_input_data.shape[0], future_input_data.shape[1], 1))
+            future_input_data = np.reshape(
+                    future_input_data,
+                    (future_input_data.shape[0],
+                     future_input_data.shape[1],
+                     1))
 
             future_predictions = model.predict(future_input_data)
 
@@ -122,7 +126,7 @@ def predictions():
 
             totalPre[stock] = future_predictions.tolist()[0]
         print(totalPre)
-        
+
         requests.get('http://127.0.0.1:5000/predictions', json=totalPre)
 
     except Exception as e:

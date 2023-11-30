@@ -16,20 +16,21 @@ def line(iterations=0):
     if not api.is_open():
         sleep(3600)
         return
-    
+
     try:
-        response=api.get_bars(stocks)
+        response = api.get_bars(stocks)
 
         for stock in response.keys():
             with open(f'D/{stock}.csv', 'a') as file:
                 file.write(f'{response[stock].t}, {response[stock].vw}\n')
-        
+
         return None
-    except:
+    except Exception:
         if iterations < 3:
             sleep(30)
             return line(iterations=iterations+1)
         return None
+
 
 schedule.every().hour.do(line)
 
